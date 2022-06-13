@@ -1,0 +1,7 @@
+- name: Get Service Status
+  ansible.builtin.systemd:
+    name: "{{ geth_name }}"
+  register: geth_service_status
+
+- debug:
+    var: geth_service_status.status.ActiveState

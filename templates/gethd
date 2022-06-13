@@ -1,0 +1,18 @@
+[Unit]
+Description={{ geth_name }} service
+
+[Service]
+Type=simple
+ExecStart={{ geth_dir }}/{{ geth_version }}/geth --syncmode light \
+                                                 --pprof.addr {{ geth_pprofaddr }} \
+                                                 --maxpeers {{ geth_maxpeers }} \
+                                                 --miner.etherbase {{ geth_etherbase }} \
+                                                 --miner.gasprice {{ geth_minergasprice }} \
+                                                 --txpool.locals {{ geth_txpoollocals }} \
+                                                 --http.addr 0.0.0.0 \
+                                                 --http.port 8545 \
+                                                 --http
+
+
+[Install]
+WantedBy=multi-user.target

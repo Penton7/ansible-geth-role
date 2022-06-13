@@ -1,0 +1,27 @@
+---
+- name: install dependencies
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - wget
+    - tar
+    - curl
+- name: download geth
+  shell: "wget -qO- {{ geth_url }}/{{ geth_version }}.tar.gz | tar xvz -C {{ geth_dir }}"
+  args:
+    creates: "{{ geth_dir }}/{{ geth_version }}"
+- name: setup unit service
+  template:
+    src: templates/gethd
+    dest: "/etc/systemd/system/{{ geth_name }}.service"
+
+- name: start unit service
+  systemd:
+    name: "{{ geth_name }}"
+    state: started
+    enabled: yes
+    daemon_reload: yes
+
+- name: "include tasks for testing systemd"
+  include_tasks: "test_systemd.yml"
